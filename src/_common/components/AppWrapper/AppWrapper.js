@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { fetchUser } from "../../../store/user";
 
 import NavMenu from "../NavMenu/NavMenu";
+import Footer from "../Footer/Footer";
 
 PropTypes.propTypes = {
   children: PropTypes.object,
@@ -25,6 +26,7 @@ const AppWrapper = ({ classes, children }) => {
         {children}
         <div id="snackbar" />
       </div>
+      <Footer />
     </div>
   );
 };

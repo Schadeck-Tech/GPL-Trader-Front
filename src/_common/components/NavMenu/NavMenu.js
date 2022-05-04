@@ -39,7 +39,6 @@ const NavMenu = ({ classes }) => {
   };
 
   const handleMenu = (e) => {
-    console.log("valorrrr", e);
     if (e === 1) {
       localStorage.setItem("token", "");
       navigate("/plans");
@@ -52,7 +51,7 @@ const NavMenu = ({ classes }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(token);
+
   return (
     <Flex className={classes.container}>
       <Flex justifyContent="space-between" alignItems="center" width="60%">
