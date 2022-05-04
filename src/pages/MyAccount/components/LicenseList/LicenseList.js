@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 
 import { useSnackbar } from "../../../../_common/hooks";
-import { Flex, Typography } from "../../../../_common/components";
+import { Flex, Loading, Typography } from "../../../../_common/components";
 import moment from "moment";
 import ModalNewLicense from "../ModalNewLicense";
 import ModalUpdateLicense from "../ModalUpdateLicense";
@@ -49,6 +49,7 @@ const header = [
 ];
 
 const LicenseList = ({ classes }) => {
+  const [loading, setLoading] = useState(false);
   const [openModalNewLicense, setOpenModalNewLicense] = useState(false);
   const [openModalUpdateLicense, setOpenModalUpdateLicense] = useState(false);
   const [openSnackbar] = useSnackbar();
@@ -84,12 +85,15 @@ const LicenseList = ({ classes }) => {
 
   const getLicenseData = async () => {
     try {
+      setLoading(true);
       const result = await api.post("/license", {
         client_id: id,
       });
       setLicenseData(result.data);
     } catch (error) {
       openSnackbar("Erro ao carregar licenças", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,108 +128,114 @@ const LicenseList = ({ classes }) => {
           Ativar licença
         </Button>
       </Flex> */}
-      <Flex
-        width="60%"
-        justifyContent="center"
-        style={{
-          background: "gray",
-          borderRadius: "8px",
-          padding: "3px",
-          marginTop: "25px",
-        }}
-      >
-        {licenseData.length === 0 ? (
-          <Typography
-            fontSize="1.5rem"
-            color="white"
-            style={{ padding: "15px 0" }}
-          >
-            Você ainda não tem licenças ativas
-          </Typography>
-        ) : (
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow style={{ background: "#151a301a" }}>
-                {header.map((tableHead) => (
-                  <TableCell
-                    align="center"
-                    key={tableHead.name}
-                    className={classes.tableHeader}
-                  >
-                    <Typography fontSize="0.95rem" fontWeight={700}>
-                      {tableHead.name}
-                    </Typography>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {licenseData.map((dat) => (
-                <TableRow key={dat.id} className={classes.tableRow}>
-                  <TableCell
-                    align="center"
-                    className={classes.tableBorderBottom}
-                  >
-                    <Typography fontSize="0.85rem">
-                      {moment(dat.created_at).format("DD/MM/YYYY")}
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.tableBorderBottom}
-                  >
-                    <Typography fontSize="0.85rem">
-                      {dat.active_at === null
-                        ? "Não ativo"
-                        : moment(dat.active_at).format("DD/MM/YYYY")}
-                    </Typography>
-                  </TableCell>
-
-                  <TableCell align="center">
-                    <Typography fontWeight={600}>{dat.license_code}</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography fontWeight={600}>{dat.account}</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography fontSize="0.9rem">{dat.type}</Typography>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={`${classes.tableCellRadiusRight}`}
-                  >
-                    {dat.account === null ? (
-                      <Typography
-                        className={classes.btEdit}
-                        onClick={() =>
-                          handleNewLicense(dat.id, dat.license_code)
-                        }
-                        style={{ backgroundColor: "green" }}
-                      >
-                        Ativar
+      {loading ? (
+        <Loading isLoading size={24} color="white" />
+      ) : (
+        <Flex
+          width="60%"
+          justifyContent="center"
+          style={{
+            background: "gray",
+            borderRadius: "8px",
+            padding: "3px",
+            marginTop: "25px",
+          }}
+        >
+          {licenseData.length === 0 ? (
+            <Typography
+              fontSize="1.5rem"
+              color="white"
+              style={{ padding: "15px 0" }}
+            >
+              Você ainda não tem licenças ativas
+            </Typography>
+          ) : (
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow style={{ background: "#151a301a" }}>
+                  {header.map((tableHead) => (
+                    <TableCell
+                      align="center"
+                      key={tableHead.name}
+                      className={classes.tableHeader}
+                    >
+                      <Typography fontSize="0.95rem" fontWeight={700}>
+                        {tableHead.name}
                       </Typography>
-                    ) : (
-                      <Typography
-                        className={classes.btEdit}
-                        onClick={() =>
-                          handleUpdateLicense(
-                            dat.id,
-                            dat.license_code,
-                            dat.account
-                          )
-                        }
-                        style={{ backgroundColor: "#ff5722" }}
-                      >
-                        Editar
-                      </Typography>
-                    )}
-                  </TableCell>
+                    </TableCell>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </Flex>
+              </TableHead>
+              <TableBody>
+                {licenseData.map((dat) => (
+                  <TableRow key={dat.id} className={classes.tableRow}>
+                    <TableCell
+                      align="center"
+                      className={classes.tableBorderBottom}
+                    >
+                      <Typography fontSize="0.85rem">
+                        {moment(dat.created_at).format("DD/MM/YYYY")}
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.tableBorderBottom}
+                    >
+                      <Typography fontSize="0.85rem">
+                        {dat.active_at === null
+                          ? "Não ativo"
+                          : moment(dat.active_at).format("DD/MM/YYYY")}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell align="center">
+                      <Typography fontWeight={600}>
+                        {dat.license_code}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography fontWeight={600}>{dat.account}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography fontSize="0.9rem">{dat.type}</Typography>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={`${classes.tableCellRadiusRight}`}
+                    >
+                      {dat.account === null ? (
+                        <Typography
+                          className={classes.btEdit}
+                          onClick={() =>
+                            handleNewLicense(dat.id, dat.license_code)
+                          }
+                          style={{ backgroundColor: "green" }}
+                        >
+                          Ativar
+                        </Typography>
+                      ) : (
+                        <Typography
+                          className={classes.btEdit}
+                          onClick={() =>
+                            handleUpdateLicense(
+                              dat.id,
+                              dat.license_code,
+                              dat.account
+                            )
+                          }
+                          style={{ backgroundColor: "#ff5722" }}
+                        >
+                          Editar
+                        </Typography>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </Flex>
+      )}
     </Flex>
   );
 };

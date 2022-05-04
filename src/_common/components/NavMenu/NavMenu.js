@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { Menu, MenuItem, Typography, withStyles } from "@material-ui/core";
+import { Menu, MenuItem, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 import { Flex } from "../";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 import Button from "../Button";
-
-import { ExitToApp } from "@material-ui/icons";
 
 PropTypes.propTypes = {
   classes: PropTypes.object,
@@ -21,12 +19,12 @@ const Links = [
   // },
   {
     id: 2,
-    name: "Planos",
+    name: "Inicio",
     url: "/plans",
   },
   {
     id: 3,
-    name: "Contato",
+    name: "Plans",
     url: "/plans",
   },
 ];
@@ -87,6 +85,14 @@ const NavMenu = ({ classes }) => {
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
               >
                 <MenuItem onClick={(e) => handleMenu(e.target.value)} value={0}>
                   Licenças

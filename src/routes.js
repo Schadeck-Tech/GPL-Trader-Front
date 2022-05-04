@@ -13,7 +13,7 @@ export default function MainRoutes() {
     <BrowserRouter>
       <AppWrapper>
         <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Plans />} />
           <Route path="/plans" element={<Plans />} />
           <Route path="/my-account" element={<Login />} />
           <Route path="/register" element={<Register />} />
