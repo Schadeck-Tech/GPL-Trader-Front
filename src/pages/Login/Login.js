@@ -20,9 +20,6 @@ PropTypes.propTypes = {
 const initialValues = {
   email: "",
   password: "",
-  confirmPassword: "",
-  nationalityId: "",
-  confirmation: false,
 };
 
 const validate = (values) => {
