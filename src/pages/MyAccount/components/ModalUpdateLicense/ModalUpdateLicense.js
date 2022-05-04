@@ -9,15 +9,63 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
-import { Flex, Typography, Card, Button } from "../../../../_common/components";
+import { Flex, Card, Button, Loading } from "../../../../_common/components";
+import { useSnackbar } from "../../../../_common/hooks";
+import { Form, Formik } from "formik";
+import api from "../../../../services/api";
 
 PropTypes.propTypes = {
   classes: PropTypes.object,
   onClose: PropTypes.func.isRequired,
   nextStep: PropTypes.func,
+  id: PropTypes.string,
+  license_code: PropTypes.string,
+  account: PropTypes.string,
 };
 
-const ModalUpdateLicense = ({ classes, onClose }) => {
+const initialValues = {
+  new_account: "",
+};
+
+const validate = (values) => {
+  const errors = {};
+
+  if (!values.new_account) {
+    errors.new_account = "Campo obrigatório";
+    return errors;
+  }
+
+  return errors;
+};
+
+const ModalUpdateLicense = ({
+  classes,
+  onClose,
+  id,
+  license_code,
+  account,
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar] = useSnackbar();
+
+  const handleUpdateLicense = async (values) => {
+    try {
+      setLoading(true);
+      const { data } = await api.post("/license/update", {
+        id: id,
+        account: Number(values.new_account),
+      });
+      openSnackbar(data.msg, "success");
+      onClose();
+      window.location.reload(true);
+    } catch (error) {
+      onClose();
+      openSnackbar("Erro ao ativar a licença", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card className={classes.card}>
       <Button
@@ -27,63 +75,81 @@ const ModalUpdateLicense = ({ classes, onClose }) => {
       >
         <CloseIcon />
       </Button>
-      <DialogTitle disableTypography className={classes.title}>
-        Alterar licença
-      </DialogTitle>
-      <DialogContent>
-        <Flex width="100%" flexDirection="column">
-          <TextField
-            variant="outlined"
-            fullWidth
-            className={classes.marginTop20}
-            id="license"
-            name="license"
-            label="Licença"
-            type="license"
-            InputLabelProps={{ shrink: true }}
-            size="small"
-            // value={bag.values.email}
-            // onChange={bag.handleChange}
-            // error={bag.touched.email && Boolean(bag.errors.email)}
-            // helperText={bag.touched.email && bag.errors.email}
-          />
-          <TextField
-            variant="outlined"
-            fullWidth
-            className={classes.marginTop20}
-            id="account"
-            type="account"
-            name="account"
-            label="Conta atual"
-            InputLabelProps={{ shrink: true }}
-            size="small"
-            // value={bag.values.password}
-            // onChange={bag.handleChange}
-            // error={bag.touched.password && Boolean(bag.errors.password)}
-            // helperText={bag.touched.password && bag.errors.password}
-          />
-          <TextField
-            variant="outlined"
-            fullWidth
-            className={classes.marginTop20}
-            id="account"
-            type="account"
-            name="account"
-            label="Conta nova"
-            InputLabelProps={{ shrink: true }}
-            size="small"
-            // value={bag.values.password}
-            // onChange={bag.handleChange}
-            // error={bag.touched.password && Boolean(bag.errors.password)}
-            // helperText={bag.touched.password && bag.errors.password}
-          />
-        </Flex>
-      </DialogContent>
-      <DialogActions>
-        <Flex width="100%" center>
-          <Button className={classes.button}>Alterar</Button>
-        </Flex>
-      </DialogActions>
+      <Formik
+        initialValues={initialValues}
+        validate={validate}
+        onSubmit={handleUpdateLicense}
+      >
+        {(bag) => (
+          <Form>
+            <DialogTitle disableTypography className={classes.title}>
+              Alterar licença
+            </DialogTitle>
+            <DialogContent>
+              <Flex width="100%" flexDirection="column">
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  className={classes.marginTop20}
+                  id="license"
+                  name="license"
+                  label="Licença"
+                  type="license"
+                  InputLabelProps={{ shrink: true }}
+                  size="small"
+                  value={license_code}
+                  disabled
+                />
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  className={classes.marginTop20}
+                  id="account"
+                  type="account"
+                  name="account"
+                  label="Conta atual"
+                  InputLabelProps={{ shrink: true }}
+                  size="small"
+                  value={account}
+                  disabled
+                />
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  className={classes.marginTop20}
+                  id="new_account"
+                  type="new_account"
+                  name="new_account"
+                  label="Conta nova"
+                  InputLabelProps={{ shrink: true }}
+                  size="small"
+                  value={bag.values.new_account}
+                  onChange={bag.handleChange}
+                  error={
+                    bag.touched.new_account && Boolean(bag.errors.new_account)
+                  }
+                  helperText={bag.touched.new_account && bag.errors.new_account}
+                />
+              </Flex>
+            </DialogContent>
+            <DialogActions>
+              <Flex width="100%" center>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className={classes.button}
+                >
+                  {loading ? (
+                    <Loading isLoading size={24} color="white" />
+                  ) : (
+                    "Alterar"
+                  )}
+                </Button>
+              </Flex>
+            </DialogActions>
+          </Form>
+        )}
+      </Formik>
     </Card>
   );
 };

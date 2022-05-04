@@ -8,7 +8,11 @@ const api = axios.create({
 });
 
 const token = localStorage.getItem("token") || "";
+const client_id = localStorage.getItem("id") || "";
 
+if (client_id) {
+  api.defaults.params = client_id;
+}
 if (token) {
   api.defaults.headers.authorization = token;
 }

@@ -1,10 +1,13 @@
-import React from "react";
-import { withStyles } from "@material-ui/core";
+import React, { useState } from "react";
+import { Menu, MenuItem, Typography, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 
 import { Flex } from "../";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../../assets/logo.png";
+import Button from "../Button";
+
+import { ExitToApp } from "@material-ui/icons";
 
 PropTypes.propTypes = {
   classes: PropTypes.object,
@@ -29,6 +32,29 @@ const Links = [
 ];
 
 const NavMenu = ({ classes }) => {
+  const token = localStorage.getItem("token");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenu = (e) => {
+    console.log("valorrrr", e);
+    if (e === 1) {
+      localStorage.setItem("token", "");
+      navigate("/plans");
+      window.location.reload(true);
+    } else if (e === 0) {
+      navigate("/license-list");
+      setAnchorEl(null);
+    }
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  console.log(token);
   return (
     <Flex className={classes.container}>
       <Flex justifyContent="space-between" alignItems="center" width="60%">
@@ -41,9 +67,36 @@ const NavMenu = ({ classes }) => {
               {link.name}
             </NavLink>
           ))}
-          <NavLink to="/my-account" className={classes.linkAccount}>
-            Minha conta
-          </NavLink>
+          {token === "" || token === null ? (
+            <NavLink to="/my-account" className={classes.linkAccount}>
+              Acessar
+            </NavLink>
+          ) : (
+            <>
+              <Button
+                className={classes.linkAccount}
+                width="30%"
+                onClick={handleClick}
+              >
+                Minha conta
+              </Button>
+
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={(e) => handleMenu(e.target.value)} value={0}>
+                  Licenças
+                </MenuItem>
+                <MenuItem onClick={(e) => handleMenu(e.target.value)} value={1}>
+                  Sair
+                </MenuItem>
+              </Menu>
+            </>
+          )}
         </Flex>
       </Flex>
     </Flex>
@@ -69,10 +122,14 @@ export default withStyles((theme) => ({
   linkAccount: {
     background: "#dadada",
     color: "#1c1c1c",
+    fontSize: "1.1rem",
     fontWeight: 700,
-    fontSize: "1rem",
     textDecoration: "none",
     padding: "10px 20px",
     borderRadius: "5px",
+    "&:hover": {
+      transform: "unset",
+      backgroundColor: "white",
+    },
   },
 }))(NavMenu);

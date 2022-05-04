@@ -51,7 +51,9 @@ const Login = ({ classes }) => {
       setLoading(true);
       const { data } = await api.post("/auth", values);
       localStorage.setItem("token", data.token);
+      localStorage.setItem("id", data.id);
       navigate("/license-list");
+      window.location.reload(true);
     } catch (error) {
       setLoginError(true);
     } finally {

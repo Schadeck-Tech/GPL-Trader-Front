@@ -9,9 +9,18 @@ PropTypes.propTypes = {
   onClose: PropTypes.func,
   classes: PropTypes.object,
   nextStep: PropTypes.func,
+  id: PropTypes.string,
+  license_code: PropTypes.string,
 };
 
-const ModalLicense = ({ open, onClose, classes, nextStep }) => {
+const ModalLicense = ({
+  open,
+  onClose,
+  classes,
+  nextStep,
+  id,
+  license_code,
+}) => {
   return (
     <Dialog
       classes={{
@@ -22,7 +31,12 @@ const ModalLicense = ({ open, onClose, classes, nextStep }) => {
       open={open}
       onClose={onClose}
     >
-      <ModalNewLicense nextStep={nextStep} onClose={onClose} />
+      <ModalNewLicense
+        nextStep={nextStep}
+        onClose={onClose}
+        id={id}
+        license_code={license_code}
+      />
     </Dialog>
   );
 };
