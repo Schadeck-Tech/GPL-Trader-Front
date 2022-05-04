@@ -10,8 +10,7 @@ import {
 } from "@material-ui/core";
 
 import { useSnackbar } from "../../../../_common/hooks";
-import { Button, Flex, Typography } from "../../../../_common/components";
-import { EditRounded } from "@material-ui/icons";
+import { Flex, Typography } from "../../../../_common/components";
 import moment from "moment";
 import ModalNewLicense from "../ModalNewLicense";
 import ModalUpdateLicense from "../ModalUpdateLicense";
@@ -85,7 +84,7 @@ const LicenseList = ({ classes }) => {
 
   const getLicenseData = async () => {
     try {
-      const result = await api.get("/license", {
+      const result = await api.post("/license", {
         client_id: id,
       });
       setLicenseData(result.data);
@@ -176,7 +175,9 @@ const LicenseList = ({ classes }) => {
                     className={classes.tableBorderBottom}
                   >
                     <Typography fontSize="0.85rem">
-                      {moment(dat.active_at).format("DD/MM/YYYY")}
+                      {dat.active_at === null
+                        ? "Não ativo"
+                        : moment(dat.active_at).format("DD/MM/YYYY")}
                     </Typography>
                   </TableCell>
 
