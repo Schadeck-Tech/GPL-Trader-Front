@@ -91,8 +91,6 @@ const LicenseList = ({ classes }) => {
       setLicenseData(result.data);
     } catch (error) {
       openSnackbar("Erro ao carregar licenças", "error");
-      localStorage.setItem("token", "");
-      window.location.reload(true);
     }
   };
 
