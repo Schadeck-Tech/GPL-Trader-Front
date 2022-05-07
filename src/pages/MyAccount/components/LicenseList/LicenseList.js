@@ -10,7 +10,12 @@ import {
 } from "@material-ui/core";
 
 import { useSnackbar } from "../../../../_common/hooks";
-import { Flex, Loading, Typography } from "../../../../_common/components";
+import {
+  Card,
+  Flex,
+  Loading,
+  Typography,
+} from "../../../../_common/components";
 import moment from "moment";
 import ModalNewLicense from "../ModalNewLicense";
 import ModalUpdateLicense from "../ModalUpdateLicense";
@@ -62,7 +67,7 @@ const LicenseList = ({ classes }) => {
   const [account, setAccount] = useState(0);
 
   useEffect(() => {
-    if (token === "") {
+    if (token === "" || token === null) {
       navigate("/my-account");
     } else {
       navigate("/license-list");
@@ -95,6 +100,25 @@ const LicenseList = ({ classes }) => {
     } finally {
       setLoading(false);
     }
+    // const data = [
+    //   {
+    //     id: "1234",
+    //     created_at: "2022-05-03 17:39:01.241",
+    //     active_at: "2022-05-03 17:39:01.241",
+    //     license_code: "66dbf354-a0e2-4834-b5f2-24bbf5c43ff0",
+    //     account: null,
+    //     type: "DEFINITIVA",
+    //   },
+    //   {
+    //     id: "123",
+    //     created_at: "2022-05-03 17:39:01.241",
+    //     active_at: "2022-05-03 17:39:01.241",
+    //     license_code: "66dbf354-a0e2-4834-b5f2-24bbf5c43ff0",
+    //     account: 123123123,
+    //     type: "DEFINITIVA",
+    //   },
+    // ];
+    // setLicenseData(data);
   };
 
   return (
@@ -118,35 +142,80 @@ const LicenseList = ({ classes }) => {
       <Typography color="white" style={{ margin: "10px 0 20px 0" }}>
         Aqui você pode ativar ou editar uma licença
       </Typography>
+      {licenseData.length === 0 ? (
+        <Flex className={classes.cardMobile}>
+          <Typography className={classes.noLicenseMsgMobile}>
+            Você ainda não tem licenças ativas
+          </Typography>
+        </Flex>
+      ) : (
+        licenseData.map((dat) => (
+          <Flex className={classes.cardMobile}>
+            <Flex
+              width="100%"
+              flexDirection="row"
+              justifyContent="space-between"
+            >
+              <Flex flexDirection="column" alignItems="flex-start">
+                <Typography fontWeight={700}>Data de compra</Typography>
+                <Typography>
+                  {moment(dat.created_at).format("DD/MM/YYYY")}
+                </Typography>
+              </Flex>
+              <Flex flexDirection="column" alignItems="flex-end">
+                <Typography fontWeight={700}>Data de ativação</Typography>
+                <Typography>
+                  {moment(dat.active_at).format("DD/MM/YYYY")}
+                </Typography>
+              </Flex>
+            </Flex>
+            <Flex
+              width="100%"
+              flexDirection="row"
+              justifyContent="space-between"
+            >
+              <Flex flexDirection="column" alignItems="flex-start">
+                <Typography fontWeight={700}>Conta</Typography>
+                <Typography>{dat.account}</Typography>
+              </Flex>
+              <Flex flexDirection="column" alignItems="flex-end">
+                <Typography fontWeight={700}>Tipo</Typography>
+                <Typography>{dat.type}</Typography>
+              </Flex>
+            </Flex>
+            <Flex flexDirection="column">
+              <Typography fontWeight={700}>Licença</Typography>
+              <Typography>{dat.license_code}</Typography>
+            </Flex>
+            {dat.account === null ? (
+              <Typography
+                className={classes.btEdit}
+                onClick={() => handleNewLicense(dat.id, dat.license_code)}
+                style={{ backgroundColor: "green" }}
+              >
+                Ativar
+              </Typography>
+            ) : (
+              <Typography
+                className={classes.btEdit}
+                onClick={() =>
+                  handleUpdateLicense(dat.id, dat.license_code, dat.account)
+                }
+                style={{ backgroundColor: "#ff5722" }}
+              >
+                Editar
+              </Typography>
+            )}
+          </Flex>
+        ))
+      )}
 
-      {/* <Flex
-        width="60%"
-        justifyContent="flex-start"
-        style={{ margin: "25px 0" }}
-      >
-        <Button className={classes.button} onClick={handleNewLicense}>
-          Ativar licença
-        </Button>
-      </Flex> */}
       {loading ? (
         <Loading isLoading size={24} color="white" />
       ) : (
-        <Flex
-          width="60%"
-          justifyContent="center"
-          style={{
-            background: "gray",
-            borderRadius: "8px",
-            padding: "3px",
-            marginTop: "25px",
-          }}
-        >
+        <Flex className={classes.tableContainer}>
           {licenseData.length === 0 ? (
-            <Typography
-              fontSize="1.5rem"
-              color="white"
-              style={{ padding: "15px 0" }}
-            >
+            <Typography className={classes.noLicenseMsg}>
               Você ainda não tem licenças ativas
             </Typography>
           ) : (
@@ -241,6 +310,33 @@ const LicenseList = ({ classes }) => {
 };
 
 export default withStyles((theme) => ({
+  cardMobile: {
+    display: "none",
+    [theme.breakpoints.only("sm")]: {
+      display: "flex",
+      flexDirection: "column",
+      width: "90vw",
+      justifyContent: "space-between",
+      maxWidth: "350px",
+      background: "white",
+      height: "300px",
+      padding: "15px",
+      borderRadius: "10px",
+      marginBottom: "25px",
+    },
+    [theme.breakpoints.only("xs")]: {
+      display: "flex",
+      flexDirection: "column",
+      width: "90vw",
+      justifyContent: "space-between",
+      maxWidth: "350px",
+      background: "white",
+      height: "300px",
+      padding: "15px",
+      borderRadius: "10px",
+      marginBottom: "25px",
+    },
+  },
   flex: {
     justifyContent: "space-between",
     width: "60%",
@@ -251,6 +347,41 @@ export default withStyles((theme) => ({
     backgroundColor: "white",
     color: "#1c1c1c",
     fontWeight: 500,
+    [theme.breakpoints.only("sm")]: {
+      width: "100% !important",
+    },
+    [theme.breakpoints.only("xs")]: {
+      width: "100% !important",
+    },
+  },
+  noLicenseMsg: {
+    fontSize: "1.5rem",
+    color: "white",
+    padding: "15px 0",
+  },
+  noLicenseMsgMobile: {
+    display: "flex",
+    justifyContent: "center",
+    fontSize: "1rem",
+    color: "black",
+    padding: "15px 0",
+  },
+  tableContainer: {
+    width: "60%",
+    justifyContent: "center",
+    background: "gray",
+    borderRadius: "8px",
+    padding: "3px",
+    marginTop: "25px",
+    [theme.breakpoints.only("md")]: {
+      width: "95%",
+    },
+    [theme.breakpoints.only("sm")]: {
+      display: "none",
+    },
+    [theme.breakpoints.only("xs")]: {
+      display: "none",
+    },
   },
   table: {
     width: "100%",
@@ -261,8 +392,6 @@ export default withStyles((theme) => ({
   button: {
     width: "225px",
     height: "45px",
-    // backgroundColor: "#d1eef3",
-
     fontSize: "1.2rem",
     fontWeight: 700,
     color: "#1c1c1c",
@@ -279,5 +408,17 @@ export default withStyles((theme) => ({
     padding: "2px 20px",
     color: "white",
     cursor: "pointer",
+    [theme.breakpoints.only("sm")]: {
+      display: "flex",
+      justifyContent: "center",
+      padding: "5px 20px",
+      fontSize: "1.2rem",
+    },
+    [theme.breakpoints.only("xs")]: {
+      display: "flex",
+      justifyContent: "center",
+      padding: "5px 20px",
+      fontSize: "1.2rem",
+    },
   },
 }))(LicenseList);

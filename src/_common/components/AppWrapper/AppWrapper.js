@@ -36,12 +36,22 @@ export default withStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     height: "100vh",
-    // backgroundImage: `url(${backgroundImage})`,
-    // backgroundColor: "#1c1c1c",
     background:
       "linear-gradient(350deg, rgba(56,56,56,1) 15%, rgba(0,0,0,1) 100%)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
+    [theme.breakpoints.only("lg")]: {
+      height: "100%",
+    },
+    [theme.breakpoints.only("md")]: {
+      height: "100%",
+    },
+    [theme.breakpoints.only("sm")]: {
+      height: "100% !important",
+    },
+    [theme.breakpoints.only("xs")]: {
+      height: "100%",
+    },
   },
   container: {
     width: "100%",

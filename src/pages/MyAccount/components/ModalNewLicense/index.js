@@ -41,6 +41,13 @@ const ModalLicense = ({
   );
 };
 
-export default withStyles(() => ({
-  paper: { borderRadius: 20, maxWidth: 500, maxHeight: 480 },
+export default withStyles((theme) => ({
+  paper: {
+    borderRadius: 20,
+    maxWidth: 500,
+    maxHeight: 480,
+    [theme.breakpoints.down("sm")]: {
+      height: "300px",
+    },
+  },
 }))(ModalLicense);

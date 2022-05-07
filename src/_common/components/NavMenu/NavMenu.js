@@ -19,12 +19,12 @@ const Links = [
   // },
   {
     id: 2,
-    name: "Inicio",
+    name: "Início",
     url: "/plans",
   },
   {
     id: 3,
-    name: "Plans",
+    name: "Planos",
     url: "/plans",
   },
 ];
@@ -54,11 +54,11 @@ const NavMenu = ({ classes }) => {
 
   return (
     <Flex className={classes.container}>
-      <Flex justifyContent="space-between" alignItems="center" width="60%">
-        <Flex width="50%">
+      <Flex className={classes.content}>
+        <Flex className={classes.img}>
           <img src={logo} alt="" width={230} />
         </Flex>
-        <Flex width="50%" justifyContent="flex-end" alignItems="center">
+        <Flex className={classes.navigation}>
           {Links.map((link) => (
             <NavLink to={link.url} className={classes.link} key={link.id}>
               {link.name}
@@ -109,12 +109,55 @@ const NavMenu = ({ classes }) => {
 };
 
 export default withStyles((theme) => ({
+  img: {
+    width: "50% !important",
+    [theme.breakpoints.down("sm")]: {
+      alignItems: "center",
+      justifyContent: "center",
+      width: "100% !important",
+    },
+  },
+  content: {
+    width: "60% !important",
+    justifyContent: "space-between",
+    alignItems: "center",
+    [theme.breakpoints.only("lg")]: {
+      width: "95% !important",
+    },
+    [theme.breakpoints.only("md")]: {
+      width: "95% !important",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100% !important",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
   container: {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
     padding: "20px 0px",
     marginBottom: "115px",
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: "50px",
+    },
+  },
+  navigation: {
+    width: "50% !important",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    [theme.breakpoints.only("sm")]: {
+      justifyContent: "center",
+      width: "100% !important",
+      marginTop: "35px",
+    },
+    [theme.breakpoints.only("xs")]: {
+      justifyContent: "center",
+      width: "100% !important",
+      marginTop: "35px",
+    },
   },
   link: {
     marginRight: "50px",

@@ -154,6 +154,10 @@ export default withStyles((theme) => ({
     alignItems: "center",
     position: "relative",
     animation: `$fadeIn 2s`,
+    marginBottom: "50px",
+    [theme.breakpoints.only("sm")]: {
+      height: "100%",
+    },
   },
   card: {
     display: "flex",
@@ -164,6 +168,12 @@ export default withStyles((theme) => ({
     height: "100%",
     background: "white",
     borderRadius: "10px",
+    [theme.breakpoints.only("sm")]: {
+      width: "70%",
+    },
+    [theme.breakpoints.only("xs")]: {
+      width: "90%",
+    },
   },
   cardTitle: {
     fontWeight: 700,

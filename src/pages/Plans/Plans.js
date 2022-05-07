@@ -60,13 +60,13 @@ const Plans = ({ classes }) => {
       >
         Planos
       </Typography>
-      <Flex width="60%" className={classes.container}>
+      <Flex className={classes.container}>
         {ITEMS.map((item) => (
           <Card className={classes.card}>
             <img src={forexImg} alt="Forex box plan" width={130} />
             <Typography className={classes.cardTitle}>{item.title}</Typography>
             <Typography className={classes.price}>{item.price}</Typography>
-            <Flex flexDirection="column">
+            <Flex className={classes.descriptionContent}>
               {item.description.map((name) => (
                 <Typography className={classes.description}>
                   <Check className={classes.icon} /> {name}
@@ -95,10 +95,35 @@ export default withStyles((theme) => ({
     to: { left: 0, opacity: "1" },
   },
   container: {
+    width: "60% !important",
     justifyContent: "space-between",
     alignItems: "flex-start",
     position: "relative",
     animation: `$animateToLeft 1s`,
+    [theme.breakpoints.only("lg")]: {
+      width: "95% !important",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    [theme.breakpoints.only("md")]: {
+      width: "95% !important",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+
+    [theme.breakpoints.only("sm")]: {
+      width: "95% !important",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+    },
+
+    [theme.breakpoints.only("xs")]: {
+      width: "95% !important",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+    },
   },
   card: {
     display: "flex",
@@ -112,11 +137,28 @@ export default withStyles((theme) => ({
     // borderTopRightRadius: "35px",
     // borderBottomLeftRadius: "35px",
     borderRadius: "20px",
+    [theme.breakpoints.only("sm")]: {
+      width: "65% !important",
+      marginBottom: "20px",
+    },
+    [theme.breakpoints.only("xs")]: {
+      width: "95% !important",
+      marginBottom: "20px",
+    },
   },
   cardTitle: {
     fontWeight: 800,
     fontSize: "1.1rem",
     color: "#1c1c1c",
+    [theme.breakpoints.only("md")]: {
+      fontSize: "0.8rem",
+    },
+    [theme.breakpoints.only("sm")]: {
+      fontSize: "1.4rem",
+    },
+    [theme.breakpoints.only("xs")]: {
+      fontSize: "1.4rem",
+    },
   },
   icon: {
     color: "#00d72e",
@@ -127,13 +169,45 @@ export default withStyles((theme) => ({
     fontSize: "2rem",
     textAlign: "left",
     color: "#1c1c1c",
+    [theme.breakpoints.only("md")]: {
+      fontSize: "1.8rem",
+    },
+    [theme.breakpoints.only("sm")]: {
+      fontSize: "2rem",
+    },
+    [theme.breakpoints.only("xs")]: {
+      fontSize: "1.8rem",
+    },
+  },
+  descriptionContent: {
+    flexDirection: "column",
+    width: "80%",
+    [theme.breakpoints.only("sm")]: {
+      width: "100% !important",
+      alignItems: "center",
+      paddingLeft: "100px",
+    },
+    [theme.breakpoints.only("xs")]: {
+      width: "100% !important",
+      alignItems: "center",
+      paddingLeft: "38px",
+    },
   },
   description: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "flex-start",
     textAlign: "left",
     fontWeight: 500,
     lineHeight: "37px",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.7rem",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "95% !important",
+      lineHeight: "25px",
+      fontSize: "1rem",
+    },
   },
   button: {
     width: "100%",

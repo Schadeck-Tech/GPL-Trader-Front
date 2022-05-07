@@ -165,6 +165,9 @@ export default withStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     height: 420,
+    [theme.breakpoints.down("sm")]: {
+      padding: "10px",
+    },
   },
   title: {
     color: "#1c1c1c",
@@ -176,6 +179,9 @@ export default withStyles((theme) => ({
     width: "95%",
     backgroundColor: "#1c1c1c",
     color: "white",
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "15px",
+    },
   },
   closeIcon: {
     position: "absolute",
